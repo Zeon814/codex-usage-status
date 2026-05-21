@@ -1,0 +1,19 @@
+{
+  "name": "codex-usage-status",
+  "version": "0.1.0",
+  "description": "Terminal usage status bars for Codex CLI.",
+  "type": "module",
+  "bin": {
+    "codex-usage-status": "./src/cli.js",
+    "codex-status": "./src/cli.js"
+  },
+  "scripts": {
+    "status": "node ./src/cli.js status",
+    "watch": "node ./src/cli.js watch",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
