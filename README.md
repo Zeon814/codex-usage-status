@@ -46,6 +46,11 @@ or:
 .\codex-status.cmd run
 ```
 
+`run` passes `--no-alt-screen` to Codex by default. This keeps Codex output
+inline so the usage bars remain visible in the terminal. If you want Codex's
+native full-screen TUI instead, pass `--codex-alt-screen`; in that mode the bars
+may only be visible in the terminal title because Codex owns the screen.
+
 Pass Codex arguments after `run`:
 
 ```powershell
@@ -61,6 +66,8 @@ node .\src\cli.js run --model gpt-5.5 --cd F:\projects
 --no-color      disable ANSI colors
 --one-line      compact output for watch/status
 --title         wrapper mode only: update terminal title without writing a status line
+--codex-alt-screen
+                wrapper mode only: keep Codex's native full-screen TUI
 ```
 
 ## Notes

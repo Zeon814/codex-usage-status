@@ -11,7 +11,8 @@ function parseOptions(args) {
     ascii: false,
     color: process.stderr.isTTY,
     oneLine: false,
-    title: false
+    title: false,
+    codexAltScreen: false
   };
   const rest = [];
 
@@ -31,6 +32,9 @@ function parseOptions(args) {
       options.oneLine = true;
     } else if (arg === "--title") {
       options.title = true;
+    } else if (arg === "--codex-alt-screen") {
+      options.codexAltScreen = true;
+      rest.push(arg);
     } else {
       rest.push(arg);
     }
@@ -52,6 +56,9 @@ Commands:
   status   Print the latest Codex usage bars and exit.
   watch    Refresh the usage bars in place.
   run      Launch Codex CLI and show a live usage status line.
+
+Run mode passes --no-alt-screen to Codex by default so the bars stay visible.
+Use --codex-alt-screen if you prefer Codex's native full-screen TUI.
 
 Environment:
   CODEX_HOME  Override the Codex home directory. Defaults to ~/.codex.
@@ -142,7 +149,7 @@ function main() {
 
   const runArgs = command === "run" ? rawArgs.slice(1) : rawArgs;
   const { options, rest } = parseOptions(runArgs);
-  const child = runCodex(rest);
+  const child = runCodex(rest, options);
   startStatusTicker(options, child);
 }
 

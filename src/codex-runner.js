@@ -16,9 +16,21 @@ export function resolveCodexCommand() {
   return { command: process.platform === "win32" ? "codex.cmd" : "codex", args: [] };
 }
 
-export function runCodex(args) {
+export function prepareCodexArgs(args, options = {}) {
+  const hasAltScreenFlag = args.includes("--no-alt-screen") || args.includes("--codex-alt-screen");
+  const normalized = args.filter((arg) => arg !== "--codex-alt-screen");
+
+  if (!options.codexAltScreen && !hasAltScreenFlag) {
+    return ["--no-alt-screen", ...normalized];
+  }
+
+  return normalized;
+}
+
+export function runCodex(args, options = {}) {
   const resolved = resolveCodexCommand();
-  const child = spawn(resolved.command, [...resolved.args, ...args], {
+  const codexArgs = prepareCodexArgs(args, options);
+  const child = spawn(resolved.command, [...resolved.args, ...codexArgs], {
     stdio: "inherit",
     env: process.env
   });
