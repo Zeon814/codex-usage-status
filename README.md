@@ -16,6 +16,18 @@ Default colors:
 
 ## Use
 
+After installing the PowerShell profile alias on this machine, run Codex directly:
+
+```powershell
+codex
+```
+
+The alias expands to:
+
+```powershell
+F:\projects\codex-usage-status\codex-status.cmd run
+```
+
 Run once:
 
 ```powershell
