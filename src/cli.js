@@ -102,10 +102,18 @@ function setTerminalTitle(text) {
 
 function startStatusTicker(options, child) {
   let last = "";
+  let lastColumns = process.stderr.columns ?? process.stdout.columns ?? 0;
   const render = () => {
     const usage = readLatestUsage();
     const output = renderOneLine(usage, { ...options, width: Math.min(options.width, 12) });
-    if (output === last) {
+    const columns = process.stderr.columns ?? process.stdout.columns ?? 0;
+    const resized = columns !== lastColumns;
+    lastColumns = columns;
+
+    if (output === last && !resized) {
+      if (!options.title) {
+        process.stderr.write(`\r\x1b[2K${output}`);
+      }
       return;
     }
     last = output;
@@ -118,8 +126,12 @@ function startStatusTicker(options, child) {
 
   const timer = setInterval(render, Math.max(500, options.interval));
   render();
+  process.stderr.on?.("resize", render);
+  process.stdout.on?.("resize", render);
   child.once("exit", () => {
     clearInterval(timer);
+    process.stderr.off?.("resize", render);
+    process.stdout.off?.("resize", render);
     if (!options.title) {
       process.stderr.write("\n");
     }
